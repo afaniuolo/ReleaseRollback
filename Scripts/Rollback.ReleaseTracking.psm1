@@ -9,7 +9,10 @@
     Number of the current Jenkins build   
 #>
 function Add-ReleaseToListFile {	
-	param([string]$ReleaseListLogFile,[string]$ReleaseTag)
+	param(
+		[string]$ReleaseListLogFile,
+		[string]$ReleaseTag
+	)
 
 	$ErrorActionPreference = 'Stop'
 

@@ -2,17 +2,27 @@
 .SYNOPSIS
     Create Delta Release
 .DESCRIPTION
-    Create folder that contains files that have been created or modified by a code release
+	Create folder that contains files that have been created or modified by a code release
+.PARAMETER Rollback
+	Switch to identify delta creation during a rollback process
 .PARAMETER WebsiteFolderPath
     Path of the origin website folder in the file system
 .PARAMETER ReleaseTag
     Name of the release tag in source control - $RELEASE_GIT_TAG in Jenkins - Format: Release/YYYYMMDD  
 .PARAMETER ReleaseBaseFolderPath
-    Path of the release base folder in the file system  
+	Path of the release base folder in the file system  
+.PARAMETER CopyFolderName
+	Name of the copy folder in the file system
 #>
 
 function New-DeltaRelease {
-	param([string]$WebsiteFolderPath,[string]$ReleaseTag,[string]$ReleaseBaseFolderPath)
+	param(
+		[switch]$Rollback,
+		[string]$WebsiteFolderPath,
+		[string]$ReleaseTag,
+		[string]$ReleaseBaseFolderPath,
+		[string]$CopyFolderName
+	)
 
 	$ErrorActionPreference = 'Stop'
 
@@ -42,7 +52,7 @@ function New-DeltaRelease {
 		$releaseDestinationFolder = $releaseDestinationFolder.Replace("Release/","")
 	}
 	$releaseDestinationFolderPath = $ReleaseBaseFolderPath + "/" + $releaseDestinationFolder
-	$releaseTempCopyFolder = $ReleaseBaseFolderPath + "/Temp/" + (Split-Path $WebsiteFolderPath -leaf) + "/"
+	$releaseTempCopyFolder = $ReleaseBaseFolderPath + "/" + $CopyFolderName + "/" + (Split-Path $WebsiteFolderPath -leaf) + "/"
 
 	$releaseDestinationChangedFolderPath = $releaseDestinationFolderPath + "/changed/"
 	$releaseDestinationAddedFolderPath = $releaseDestinationFolderPath + "/added/"
@@ -97,7 +107,10 @@ function New-DeltaRelease {
 		}
 	}
 
-	# Delete the Temp folder
-	Remove-Item -Path $releaseTempCopyFolder -Recurse
+	if (!$Rollback)
+	{
+		# Delete the Temp folder
+		Remove-Item -Path $releaseTempCopyFolder -Recurse
+	}
 }
 export-modulemember -function New-DeltaRelease

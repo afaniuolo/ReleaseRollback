@@ -7,26 +7,38 @@
     Path of the origin website folder in the file system
 .PARAMETER ReleaseBaseFolderPath
 	Path of the release base folder in the file system  
+.PARAMETER CopyFolderName
+	Name of the copy folder in the file system
 #>
 function Copy-Website {
-	param([string]$WebsiteFolderPath,[string]$ReleaseBaseFolderPath)
+	param(
+		[string]$WebsiteFolderPath,
+		[string]$ReleaseBaseFolderPath,
+		[string]$CopyFolderName
+	)
 
 	$ErrorActionPreference = 'Stop'
 
 	if(!$WebsiteFolderPath)
 	{
-		Write-Host "Website Folder Path parameter cannot be empty!"
+		Write-Host "WebsiteFolderPath parameter cannot be empty!"
 		Exit 1
 	}
 
 	if(!$ReleaseBaseFolderPath)
 	{
-		Write-Host "Release Base Folder Path parameter cannot be empty!"
+		Write-Host "ReleaseBaseFolderPath parameter cannot be empty!"
+		Exit 1
+	}
+
+	if(!$CopyFolderName)
+	{
+		Write-Host "CopyFolderName parameter cannot be empty!"
 		Exit 1
 	}
 
 	# Create temp folder - copy of website folder
-	$releaseTempCopyFolder = $ReleaseBaseFolderPath + "/Temp"
+	$releaseTempCopyFolder = $ReleaseBaseFolderPath + "/" + $CopyFolderName
 
 	if (Test-Path $releaseTempCopyFolder)
 	{

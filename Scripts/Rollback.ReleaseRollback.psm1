@@ -13,7 +13,12 @@
     Path of the release list log file   
 #>
 function Undo-Release {
-    param([string]$WebsiteFolderPath,[string]$RollbackReleaseTag,[string]$ReleaseBaseFolderPath,[string]$ReleaseListLogFile)
+    param(
+        [string]$WebsiteFolderPath,
+        [string]$RollbackReleaseTag,
+        [string]$ReleaseBaseFolderPath,
+        [string]$ReleaseListLogFile
+    )
 
     $ErrorActionPreference = 'Stop'
 
