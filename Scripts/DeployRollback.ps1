@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-    Deploy Website and Create Delta Release
+    Deploy Website and Create Delta Release or Rollback Release
 .DESCRIPTION
-    This script will deploy a website and create a delta release
+    This script will deploy a website and create a delta release or it will rollback code to a past release.
 .PARAMETER Rollback
     Switch to execute a release rollback
 .PARAMETER Unicorn
@@ -55,8 +55,10 @@ if (!$Rollback)
     $tempCopyFolderName = "TempWebsiteCopy"
     $latestCopyFolderName = "LatestWebsiteCopy"
     
-    Copy-Website -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $tempCopyFolderName
-
+    # 1. Make a temporary copy of the server website folder
+	Copy-Website -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $tempCopyFolderName
+	
+	# 2a. Robocopy source website files to destination server website folder
     robocopy $WebsiteSourceFolderPath $WebsiteDestFolderPath /E /S /XD .svn
     if ($lastexitcode -gt 3)
     {
@@ -64,6 +66,7 @@ if (!$Rollback)
         Exit 1
     }
 
+	# 2b. If Unicorn is used, robocopy unicorn serialized files to destination server Unicorn serialization folder
     if ($Unicorn)
     {
         robocopy $UnicornSourceFolderPath $UnicornDestFolderPath /E /PURGE /S /XD .svn
@@ -74,21 +77,25 @@ if (!$Rollback)
         }
     }
 
+	# 3. Create a delta release
     New-DeltaRelease -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseTag $ReleaseTag -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $tempCopyFolderName
-
+	
+	# 4. Track new release to listing tracking file
     Add-ReleaseToListFile -ReleaseListLogFile $ReleaseListLogFile -ReleaseTag $ReleaseTag
-
+	
+	# 5. Make a copy of the latest server website folder
     Copy-Website -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $latestCopyFolderName
 }
 else {
-    # Create an extra delta release (to catch manual changes in website folder after last automated release)
+    # ROLLBACK EXECUTION
+	# 1. Create an extra delta release (to catch manual changes in website folder after last automated release)
     $preRollbackReleaseTag = "Release/" + (Get-Date -format "yyyyMMdd") + "-ManualChanges"
     New-DeltaRelease -Rollback -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseTag $preRollbackReleaseTag -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $latestCopyFolderName
-    # Add extra release in release list log file
+    # 2. Track extra release in listing tracking file
     Add-ReleaseToListFile -ReleaseListLogFile $ReleaseListLogFile -ReleaseTag $preRollbackReleaseTag
-    # Execute the Rollback
+    # 3. Execute the code Rollback
     Undo-Release -WebsiteFolderPath $WebsiteDestFolderPath -RollbackReleaseTag $ReleaseTag -ReleaseBaseFolderPath $ReleaseBaseFolderPath -ReleaseListLogFile $ReleaseListLogFile
-    # Create post-rollback delta release
+    # 4. Create post-rollback delta release
     $postRollbackReleaseTag = "Release/" + (Get-Date -format "yyyyMMdd") + "-Rollback"
     Copy-Website -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $tempCopyFolderName
     New-DeltaRelease -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseTag $postRollbackReleaseTag -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $latestCopyFolderName
