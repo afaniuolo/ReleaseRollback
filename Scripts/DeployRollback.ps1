@@ -45,10 +45,10 @@ param(
     [Parameter(Mandatory=$true)] [string]$ReleaseListLogFile
 )
 
-Import-Module ./Rollback.CopyWebsite.psm1 -Force
-Import-Module ./Rollback.DeltaReleaseCreation.psm1 -Force
-Import-Module ./Rollback.ReleaseTracking.psm1 -Force
-Import-Module ./Rollback.ReleaseRollback.psm1 -Force
+Import-Module ./Scripts/Rollback.CopyWebsite.psm1 -Force
+Import-Module ./Scripts/Rollback.DeltaReleaseCreation.psm1 -Force
+Import-Module ./Scripts/Rollback.ReleaseTracking.psm1 -Force
+Import-Module ./Scripts/Rollback.ReleaseRollback.psm1 -Force
 
 if (!$Rollback)
 {
