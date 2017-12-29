@@ -95,9 +95,9 @@ function New-DeltaRelease {
 		If ($diffFile.StartsWith($releaseTempCopyFolder,"CurrentCultureIgnoreCase") -And ($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder,($WebsiteFolderPath + "\"))))
 		{
 			$splitPath = Split-Path $diffFile
-			Write-Host ("ChangedFile - SplitPath = " + $splitPath
+			Write-Host ("ChangedFile - SplitPath = " + $splitPath)
 			$relativePath = $splitPath.Replace($releaseTempCopyFolder,"")
-			Write-Host ("ChangedFile - RelativePath = " + $relativePath
+			Write-Host ("ChangedFile - RelativePath = " + $relativePath)
 			$destinationPath = $releaseDestinationChangedFolderPath + $relativePath + (Split-Path $diffFile -leaf)
 			Write-Host ("ChangedFile - DestinationPath = " + $destinationPath)
 			$destinationFolder = $releaseDestinationChangedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder,""))
