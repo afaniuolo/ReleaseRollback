@@ -84,6 +84,7 @@ function Undo-Release {
         For ($i = ($numberOfLinesInReleaseListLogFile); $i -gt $lineNumber-1; $i--)
         {
             $intermediateReleaseTag = (((Get-Content $ReleaseListLogFile)[$i-1]).Split(','))[0]
+            $intermediateRollbackTag = (((Get-Content $ReleaseListLogFile)[$i-1]).Split(','))[1]
 
             $rollbackIntermediateMsg = 'Rolling back to the intermediate release ' + $intermediateReleaseTag
             Write-Host $rollbackIntermediateMsg
