@@ -86,7 +86,7 @@ function New-DeltaRelease {
 		# Changed file
 		If ($diffFile.StartsWith($releaseTempCopyFolder.Replace("/","\"),"CurrentCultureIgnoreCase") -And ($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder.Replace("/","\"),($WebsiteFolderPath + "\"))))
 		{
-			Write-Host ("ChangedFile - SplitPath = " + Split-Path $diffFile)
+			Write-Host ("ChangedFile - SplitPath = " + (Split-Path $diffFile))
 			$destinationPath = $releaseDestinationChangedFolderPath.Replace("/","\") + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),"")) + "\" + (Split-Path $diffFile -leaf)
 			Write-Host ("ChangedFile - DestinationPath = " + $destinationPath)
 			$destinationFolder = $releaseDestinationChangedFolderPath.Replace("/","\") + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),""))
@@ -97,7 +97,7 @@ function New-DeltaRelease {
 		# Added file
 		ElseIf ($diffFile.StartsWith($WebsiteFolderPath,"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace(($WebsiteFolderPath + "\"),$releaseTempCopyFolder.Replace("/","\"))))
 		{
-			Write-Host ("AddedFile - SplitPath = " + Split-Path $diffFile)
+			Write-Host ("AddedFile - SplitPath = " + (Split-Path $diffFile))
 			$destinationPath = $releaseDestinationAddedFolderPath.Replace("/","\") + ((Split-Path $diffFile).Replace($WebsiteFolderPath,"")) + "\" + (Split-Path $diffFile -leaf)
 			Write-Host ("AddedFile - DestinationPath = " + $destinationPath)
 			$destinationFolder = $releaseDestinationAddedFolderPath.Replace("/","\") + ((Split-Path $diffFile).Replace($WebsiteFolderPath,""))
@@ -108,7 +108,7 @@ function New-DeltaRelease {
 		# Deleted file
 		ElseIf ($diffFile.StartsWith($releaseTempCopyFolder.Replace("/","\"),"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder.Replace("/","\"),($WebsiteFolderPath + "\"))))
 		{
-			Write-Host ("DeletedFile - SplitPath = " + Split-Path $diffFile)
+			Write-Host ("DeletedFile - SplitPath = " + (Split-Path $diffFile))
 			$destinationPath = $releaseDestinationDeletedFolderPath.Replace("/","\") + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),"")) + "\" + (Split-Path $diffFile -leaf)
 			Write-Host ("DeletedFile - DestinationPath = " + $destinationPath)
 			$destinationFolder = $releaseDestinationDeletedFolderPath.Replace("/","\") + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),""))
