@@ -101,37 +101,45 @@ function Undo-Release {
             $releaseDestinationAddedFolderPath = $releaseDestinationFolderPath + '/added'
             $releaseDestinationDeletedFolderPath = $releaseDestinationFolderPath + '/deleted'
 
+            $releaseDestinationChangedFolderPath = $releaseDestinationChangedFolderPath.Replace("/","\")
+            $releaseDestinationAddedFolderPath = $releaseDestinationAddedFolderPath.Replace("/","\")
+            $releaseDestinationDeletedFolderPath = $releaseDestinationDeletedFolderPath.Replace("/","\")
+
             # Execure Rollback
             # 1 - Copy the changed files
-            Write-Host "Processing changed files..."
+            Write-Host "Rolling back changed files..."
             $changedFiles = Get-ChildItem -Path $releaseDestinationChangedFolderPath -Recurse | foreach {Get-FileHash -Path $_.FullName}
             ForEach ($changedFile in $changedFiles)
             {
                 $changedFilePath = $changedFile.Path
-                Write-Host ("Processing " + $changedFilePath)
-                $destinationPath = $WebsiteFolderPath + ((Split-Path $changedFilePath).Replace($releaseDestinationChangedFolderPath.Replace("/","\"),"")) + "\" + (Split-Path $changedFilePath -leaf)
+                $filepath = Split-Path $changedFilePath
+                $filename = Split-Path $changedFilePath -leaf
+                Write-Host ("Rolling back " + $changedFilePath)
+                $destinationPath = $WebsiteFolderPath + ($filepath.Replace($releaseDestinationChangedFolderPath,"")) + "\" + $filename
                 Copy-Item -Path $changedFilePath -Destination $destinationPath
             }
             # 2 - Restore the deleted files
-            Write-Host "Processing deleted files..."
+            Write-Host "Rolling back deleted files..."
             $deletedFiles = Get-ChildItem -Path $releaseDestinationDeletedFolderPath -Recurse | foreach {Get-FileHash -Path $_.FullName}
             ForEach ($deletedFile in $deletedFiles)
             {
                 $deletedFilePath = $deletedFile.Path
-                Write-Host ("Processing " + $deletedFilePath)
-                $destinationPath = $WebsiteFolderPath + ((Split-Path $deletedFilePath).Replace($releaseDestinationDeletedFolderPath.Replace("/","\"),"")) + "\" + (Split-Path $deletedFilePath -leaf)
-                $destinationFolder = $WebsiteFolderPath + ((Split-Path $deletedFilePath).Replace($releaseDestinationDeletedFolderPath.Replace("/","\"),""))
+                $filepath = Split-Path $deletedFilePath
+                $filename = Split-Path $deletedFilePath -leaf
+                Write-Host ("Rolling back " + $deletedFilePath)
+                $destinationPath = $WebsiteFolderPath + ($filepath.Replace($releaseDestinationDeletedFolderPath,"")) + "\" + $filename
+                $destinationFolder = $WebsiteFolderPath + ($filepath.Replace($releaseDestinationDeletedFolderPath,""))
                 New-Item -ItemType Directory -Force -Path $destinationFolder
                 Copy-Item -Path $deletedFilePath -Destination $destinationPath
             }
             # 3 - Remove the added files
-            Write-Host "Processing added files..."
+            Write-Host "Rolling back added files..."
             $addedFiles = Get-ChildItem -Path $releaseDestinationAddedFolderPath -Recurse | foreach {Get-FileHash -Path $_.FullName}
             ForEach ($addedFile in $addedFiles)
             {
                 $addedFilePath = $addedFile.Path
-                Write-Host ("Processing " + $addedFilePath)
-                $pathToDelete = $addedFilePath.Replace($releaseDestinationAddedFolderPath.Replace("/","\"),$WebsiteFolderPath)
+                Write-Host ("Rolling back " + $addedFilePath)
+                $pathToDelete = $addedFilePath.Replace($releaseDestinationAddedFolderPath,$WebsiteFolderPath)
                 Remove-Item $pathToDelete
             }
         }
