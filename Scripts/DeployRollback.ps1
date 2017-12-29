@@ -78,7 +78,13 @@ if (!$Rollback)
     }
 
 	# 3. Create a delta release
-    New-DeltaRelease -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseTag $ReleaseTag -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $tempCopyFolderName
+    if (!(Test-Path ($ReleaseBaseFolderPath + "/" + $latestCopyFolderName)))
+    {
+        New-DeltaRelease -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseTag $ReleaseTag -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $tempCopyFolderName
+    }
+    else {
+        New-DeltaRelease -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseTag $ReleaseTag -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $latestCopyFolderName
+    }
 	
 	# 4. Track new release to listing tracking file
     Add-ReleaseToListFile -ReleaseListLogFile $ReleaseListLogFile -ReleaseTag $ReleaseTag
