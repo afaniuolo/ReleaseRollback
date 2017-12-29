@@ -6,6 +6,7 @@
     <address>
         212 Elm Street<br />
         Somerville, MA 02144<br />
+        U.S.A.<br />
         <abbr title="Phone">P:</abbr>
         617.440.3114 ext. 620
     </address>
