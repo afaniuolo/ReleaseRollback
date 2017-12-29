@@ -50,11 +50,11 @@ Import-Module ./Scripts/Rollback.DeltaReleaseCreation.psm1 -Force
 Import-Module ./Scripts/Rollback.ReleaseTracking.psm1 -Force
 Import-Module ./Scripts/Rollback.ReleaseRollback.psm1 -Force
 
+$tempCopyFolderName = "TempWebsiteCopy"
+$latestCopyFolderName = "LatestWebsiteCopy"
+
 if (!$Rollback)
-{
-    $tempCopyFolderName = "TempWebsiteCopy"
-    $latestCopyFolderName = "LatestWebsiteCopy"
-    
+{   
     # 1. Make a temporary copy of the server website folder
 	Copy-Website -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $tempCopyFolderName
 	
