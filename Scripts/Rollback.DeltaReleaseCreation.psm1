@@ -95,7 +95,7 @@ function New-DeltaRelease {
 		$releaseDestinationDeletedFolderPath = $releaseDestinationDeletedFolderPath.Replace("/","\")
 
 		# Changed file
-		If ($diffFile.StartsWith($releaseTempCopyFolder,"CurrentCultureIgnoreCase") -And ($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder,($WebsiteFolderPath + "\"))))
+		If ($diffFile.StartsWith($releaseTempCopyFolder,"CurrentCultureIgnoreCase") -And ($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder,($WebsiteFolderPath))))
 		{
 			$splitPath = Split-Path $diffFile
 			Write-Host ("ChangedFile - SplitPath = " + $splitPath)
@@ -109,7 +109,7 @@ function New-DeltaRelease {
 			Copy-Item -Path $diffFile -Destination $destinationPath
 		}
 		# Added file
-		ElseIf ($diffFile.StartsWith($WebsiteFolderPath,"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace(($WebsiteFolderPath + "\"),$releaseTempCopyFolder)))
+		ElseIf ($diffFile.StartsWith($WebsiteFolderPath,"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace(($WebsiteFolderPath),$releaseTempCopyFolder)))
 		{
 			Write-Host ("AddedFile - SplitPath = " + (Split-Path $diffFile))
 			$destinationPath = $releaseDestinationAddedFolderPath + ((Split-Path $diffFile).Replace($WebsiteFolderPath,"")) + "\" + (Split-Path $diffFile -leaf)
@@ -120,7 +120,7 @@ function New-DeltaRelease {
 			Copy-Item -Path $diffFile -Destination $destinationPath
 		}
 		# Deleted file
-		ElseIf ($diffFile.StartsWith($releaseTempCopyFolder,"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder,($WebsiteFolderPath + "\"))))
+		ElseIf ($diffFile.StartsWith($releaseTempCopyFolder,"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder,($WebsiteFolderPath))))
 		{
 			Write-Host ("DeletedFile - SplitPath = " + (Split-Path $diffFile))
 			$destinationPath = $releaseDestinationDeletedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder,"")) + "\" + (Split-Path $diffFile -leaf)
