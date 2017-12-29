@@ -1,0 +1,3 @@
+# Custom for TDS/Sitecore serialization 
+*.item -text 
+*.item.template -text
