@@ -80,13 +80,16 @@ function New-DeltaRelease {
 
 	Write-Host $diffFilesMessage
 
+	$releaseTempCopyFolder = $releaseTempCopyFolder.Replace("/","\")
+	Write-Host ("ReleaseTempCopyFolder = " + $releaseTempCopyFolder)
+	$WebsiteFolderPath = $WebsiteFolderPath.Replace("/","\")
+	Write-Host ("WebsiteFolderPath = " + $WebsiteFolderPath)
+
 	# Loop through the list of different files and store them in the correct sub-release folders (changed, added, deleted)
 	ForEach ($diffFile In $diffFilesArray)
 	{
 		# Normalize paths
 		$diffFile = $diffFile.Replace("/","\")
-		$releaseTempCopyFolder = $releaseTempCopyFolder.Replace("/","\")
-		$WebsiteFolderPath = $WebsiteFolderPath.Replace("/","\")
 		$releaseDestinationChangedFolderPath = $releaseDestinationChangedFolderPath.Replace("/","\")
 		$releaseDestinationAddedFolderPath = $releaseDestinationAddedFolderPath.Replace("/","\")
 		$releaseDestinationDeletedFolderPath = $releaseDestinationDeletedFolderPath.Replace("/","\")
