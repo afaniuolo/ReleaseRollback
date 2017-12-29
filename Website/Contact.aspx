@@ -4,10 +4,10 @@
     <h2><%: Title %>.</h2>
     <h3>Your contact page.</h3>
     <address>
-        One Microsoft Way<br />
-        Redmond, WA 98052-6399<br />
+        212 Elm Street<br />
+        Somerville, MA 02144<br />
         <abbr title="Phone">P:</abbr>
-        425.555.0100
+        617.440.3114 ext. 620
     </address>
 
     <address>
