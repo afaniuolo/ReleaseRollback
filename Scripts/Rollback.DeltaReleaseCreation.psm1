@@ -56,9 +56,9 @@ function New-DeltaRelease {
 	$releaseDestinationFolderPath = $ReleaseBaseFolderPath + "/" + $releaseDestinationFolder
 	$releaseTempCopyFolder = $ReleaseBaseFolderPath + "/" + $CopyFolderName + "/" + (Split-Path $WebsiteFolderPath -leaf) + "/"
 
-	$releaseDestinationChangedFolderPath = $releaseDestinationFolderPath + "/changed/"
-	$releaseDestinationAddedFolderPath = $releaseDestinationFolderPath + "/added/"
-	$releaseDestinationDeletedFolderPath = $releaseDestinationFolderPath + "/deleted/"
+	$releaseDestinationChangedFolderPath = $releaseDestinationFolderPath + "/changed"
+	$releaseDestinationAddedFolderPath = $releaseDestinationFolderPath + "/added"
+	$releaseDestinationDeletedFolderPath = $releaseDestinationFolderPath + "/deleted"
 
 	if (!(Test-Path $releaseDestinationFolderPath))
 	{
@@ -99,7 +99,7 @@ function New-DeltaRelease {
 		# Changed file
 		If ($diffFile.StartsWith($releaseTempCopyFolder,"CurrentCultureIgnoreCase") -And ($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder,($WebsiteFolderPath))))
 		{
-			$relativePath = $filepath.Replace($releaseTempCopyFolder,"").TrimStart("\")
+			$relativePath = $filepath.Replace($releaseTempCopyFolder,"").TrimEnd("\")
 			Write-Host ("ChangedFile - RelativePath = " + $relativePath)
 			$destinationPath = $releaseDestinationChangedFolderPath + $relativePath + "\" + $filename
 			Write-Host ("ChangedFile - DestinationPath = " + $destinationPath)
@@ -111,7 +111,7 @@ function New-DeltaRelease {
 		# Added file
 		ElseIf ($diffFile.StartsWith($WebsiteFolderPath,"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace(($WebsiteFolderPath),$releaseTempCopyFolder)))
 		{
-			$relativePath = $filepath.Replace($WebsiteFolderPath,"").TrimStart("\")
+			$relativePath = $filepath.Replace($WebsiteFolderPath,"").TrimEnd("\")
 			Write-Host ("AddedFile - RelativePath = " + $relativePath)
 			$destinationPath = $releaseDestinationAddedFolderPath + $relativePath + "\" + $filename
 			Write-Host ("AddedFile - DestinationPath = " + $destinationPath)
@@ -123,7 +123,7 @@ function New-DeltaRelease {
 		# Deleted file
 		ElseIf ($diffFile.StartsWith($releaseTempCopyFolder,"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder,($WebsiteFolderPath))))
 		{
-			$relativePath = $filepath.Replace($releaseTempCopyFolder,"").TrimStart("\")
+			$relativePath = $filepath.Replace($releaseTempCopyFolder,"").TrimEnd("\")
 			Write-Host ("DeletedFile - RelativePath = " + $relativePath)
 			$destinationPath = $releaseDestinationDeletedFolderPath + $relativePath + "\" + $filename
 			Write-Host ("DeletedFile - DestinationPath = " + $destinationPath)
