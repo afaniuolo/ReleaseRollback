@@ -86,9 +86,9 @@ function New-DeltaRelease {
 		# Changed file
 		If ($diffFile.StartsWith($releaseTempCopyFolder.Replace("/","\"),"CurrentCultureIgnoreCase") -And ($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder.Replace("/","\"),($WebsiteFolderPath + "\"))))
 		{
-			$destinationPath = $releaseDestinationChangedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),"")) + "\" + (Split-Path $diffFile -leaf)
+			$destinationPath = $releaseDestinationChangedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder,"")) + "\" + (Split-Path $diffFile -leaf)
 			Write-Host -Message ("ChangedFile - DestinationPath = " + $destinationPath)
-			$destinationFolder = $releaseDestinationChangedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),""))
+			$destinationFolder = $releaseDestinationChangedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder,""))
 			Write-Host -Message ("ChangedFile - DestinationFolder = " + $destinationFolder)
 			New-Item -ItemType Directory -Force -Path $destinationFolder
 			Copy-Item -Path $diffFile -Destination $destinationPath
@@ -106,9 +106,9 @@ function New-DeltaRelease {
 		# Deleted file
 		ElseIf ($diffFile.StartsWith($releaseTempCopyFolder.Replace("/","\"),"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder.Replace("/","\"),($WebsiteFolderPath + "\"))))
 		{
-			$destinationPath = $releaseDestinationDeletedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),"")) + "\" + (Split-Path $diffFile -leaf)
+			$destinationPath = $releaseDestinationDeletedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder,"")) + "\" + (Split-Path $diffFile -leaf)
 			Write-Host -Message ("DeletedFile - DestinationPath = " + $destinationPath)
-			$destinationFolder = $releaseDestinationDeletedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),""))
+			$destinationFolder = $releaseDestinationDeletedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder,""))
 			Write-Host -Message ("DeletedFile - DestinationFolder = " + $destinationFolder)
 			New-Item -ItemType Directory -Force -Path $destinationFolder
 			Copy-Item -Path $diffFile -Destination $destinationPath
