@@ -87,9 +87,9 @@ function New-DeltaRelease {
 		If ($diffFile.StartsWith($releaseTempCopyFolder.Replace("/","\"),"CurrentCultureIgnoreCase") -And ($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder.Replace("/","\"),($WebsiteFolderPath + "\"))))
 		{
 			$destinationPath = $releaseDestinationChangedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),"")) + "\" + (Split-Path $diffFile -leaf)
-			Write-Verbose -Message ("ChangedFile - DestinationPath = " + $destinationPath)
+			Write-Host -Message ("ChangedFile - DestinationPath = " + $destinationPath)
 			$destinationFolder = $releaseDestinationChangedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),""))
-			Write-Verbose -Message ("ChangedFile - DestinationFolder = " + $destinationFolder)
+			Write-Host -Message ("ChangedFile - DestinationFolder = " + $destinationFolder)
 			New-Item -ItemType Directory -Force -Path $destinationFolder
 			Copy-Item -Path $diffFile -Destination $destinationPath
 		}
@@ -97,9 +97,9 @@ function New-DeltaRelease {
 		ElseIf ($diffFile.StartsWith($WebsiteFolderPath,"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace(($WebsiteFolderPath + "\"),$releaseTempCopyFolder.Replace("/","\"))))
 		{
 			$destinationPath = $releaseDestinationAddedFolderPath + ((Split-Path $diffFile).Replace($WebsiteFolderPath,"")) + "\" + (Split-Path $diffFile -leaf)
-			Write-Verbose -Message ("AddedFile - DestinationPath = " + $destinationPath)
+			Write-Host -Message ("AddedFile - DestinationPath = " + $destinationPath)
 			$destinationFolder = $releaseDestinationAddedFolderPath + ((Split-Path $diffFile).Replace($WebsiteFolderPath,""))
-			Write-Verbose -Message ("AddedFile - DestinationFolder = " + $destinationFolder)
+			Write-Host -Message ("AddedFile - DestinationFolder = " + $destinationFolder)
 			New-Item -ItemType Directory -Force -Path $destinationFolder
 			Copy-Item -Path $diffFile -Destination $destinationPath
 		}
@@ -107,9 +107,9 @@ function New-DeltaRelease {
 		ElseIf ($diffFile.StartsWith($releaseTempCopyFolder.Replace("/","\"),"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder.Replace("/","\"),($WebsiteFolderPath + "\"))))
 		{
 			$destinationPath = $releaseDestinationDeletedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),"")) + "\" + (Split-Path $diffFile -leaf)
-			Write-Verbose -Message ("DeletedFile - DestinationPath = " + $destinationPath)
+			Write-Host -Message ("DeletedFile - DestinationPath = " + $destinationPath)
 			$destinationFolder = $releaseDestinationDeletedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),""))
-			Write-Verbose -Message ("DeletedFile - DestinationFolder = " + $destinationFolder)
+			Write-Host -Message ("DeletedFile - DestinationFolder = " + $destinationFolder)
 			New-Item -ItemType Directory -Force -Path $destinationFolder
 			Copy-Item -Path $diffFile -Destination $destinationPath
 		}
