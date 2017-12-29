@@ -86,30 +86,33 @@ function New-DeltaRelease {
 		# Changed file
 		If ($diffFile.StartsWith($releaseTempCopyFolder.Replace("/","\"),"CurrentCultureIgnoreCase") -And ($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder.Replace("/","\"),($WebsiteFolderPath + "\"))))
 		{
-			$destinationPath = $releaseDestinationChangedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder,"")) + "\" + (Split-Path $diffFile -leaf)
-			Write-Host -Message ("ChangedFile - DestinationPath = " + $destinationPath)
-			$destinationFolder = $releaseDestinationChangedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder,""))
-			Write-Host -Message ("ChangedFile - DestinationFolder = " + $destinationFolder)
+			Write-Host ("ChangedFile - SplitPath = " + Split-Path $diffFile)
+			$destinationPath = $releaseDestinationChangedFolderPath.Replace("/","\") + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),"")) + "\" + (Split-Path $diffFile -leaf)
+			Write-Host ("ChangedFile - DestinationPath = " + $destinationPath)
+			$destinationFolder = $releaseDestinationChangedFolderPath.Replace("/","\") + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),""))
+			Write-Host ("ChangedFile - DestinationFolder = " + $destinationFolder)
 			New-Item -ItemType Directory -Force -Path $destinationFolder
 			Copy-Item -Path $diffFile -Destination $destinationPath
 		}
 		# Added file
 		ElseIf ($diffFile.StartsWith($WebsiteFolderPath,"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace(($WebsiteFolderPath + "\"),$releaseTempCopyFolder.Replace("/","\"))))
 		{
-			$destinationPath = $releaseDestinationAddedFolderPath + ((Split-Path $diffFile).Replace($WebsiteFolderPath,"")) + "\" + (Split-Path $diffFile -leaf)
-			Write-Host -Message ("AddedFile - DestinationPath = " + $destinationPath)
-			$destinationFolder = $releaseDestinationAddedFolderPath + ((Split-Path $diffFile).Replace($WebsiteFolderPath,""))
-			Write-Host -Message ("AddedFile - DestinationFolder = " + $destinationFolder)
+			Write-Host ("AddedFile - SplitPath = " + Split-Path $diffFile)
+			$destinationPath = $releaseDestinationAddedFolderPath.Replace("/","\") + ((Split-Path $diffFile).Replace($WebsiteFolderPath,"")) + "\" + (Split-Path $diffFile -leaf)
+			Write-Host ("AddedFile - DestinationPath = " + $destinationPath)
+			$destinationFolder = $releaseDestinationAddedFolderPath.Replace("/","\") + ((Split-Path $diffFile).Replace($WebsiteFolderPath,""))
+			Write-Host ("AddedFile - DestinationFolder = " + $destinationFolder)
 			New-Item -ItemType Directory -Force -Path $destinationFolder
 			Copy-Item -Path $diffFile -Destination $destinationPath
 		}
 		# Deleted file
 		ElseIf ($diffFile.StartsWith($releaseTempCopyFolder.Replace("/","\"),"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder.Replace("/","\"),($WebsiteFolderPath + "\"))))
 		{
-			$destinationPath = $releaseDestinationDeletedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder,"")) + "\" + (Split-Path $diffFile -leaf)
-			Write-Host -Message ("DeletedFile - DestinationPath = " + $destinationPath)
-			$destinationFolder = $releaseDestinationDeletedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder,""))
-			Write-Host -Message ("DeletedFile - DestinationFolder = " + $destinationFolder)
+			Write-Host ("DeletedFile - SplitPath = " + Split-Path $diffFile)
+			$destinationPath = $releaseDestinationDeletedFolderPath.Replace("/","\") + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),"")) + "\" + (Split-Path $diffFile -leaf)
+			Write-Host ("DeletedFile - DestinationPath = " + $destinationPath)
+			$destinationFolder = $releaseDestinationDeletedFolderPath.Replace("/","\") + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),""))
+			Write-Host ("DeletedFile - DestinationFolder = " + $destinationFolder)
 			New-Item -ItemType Directory -Force -Path $destinationFolder
 			Copy-Item -Path $diffFile -Destination $destinationPath
 		}
