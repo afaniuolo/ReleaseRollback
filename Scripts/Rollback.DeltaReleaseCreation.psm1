@@ -13,6 +13,8 @@
 	Path of the release base folder in the file system  
 .PARAMETER CopyFolderName
 	Name of the copy folder in the file system
+.PARAMETER VerboseLog
+    Switch to execute a release rollback
 #>
 
 function New-DeltaRelease {
@@ -85,7 +87,9 @@ function New-DeltaRelease {
 		If ($diffFile.StartsWith($releaseTempCopyFolder.Replace("/","\"),"CurrentCultureIgnoreCase") -And ($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder.Replace("/","\"),($WebsiteFolderPath + "\"))))
 		{
 			$destinationPath = $releaseDestinationChangedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),"")) + "\" + (Split-Path $diffFile -leaf)
+			Write-Verbose -Message "ChangedFile - DestinationPath = " + $destinationPath
 			$destinationFolder = $releaseDestinationChangedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),""))
+			Write-Verbose -Message "ChangedFile - DestinationFolder = " + $destinationFolder
 			New-Item -ItemType Directory -Force -Path $destinationFolder
 			Copy-Item -Path $diffFile -Destination $destinationPath
 		}
@@ -93,7 +97,9 @@ function New-DeltaRelease {
 		ElseIf ($diffFile.StartsWith($WebsiteFolderPath,"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace(($WebsiteFolderPath + "\"),$releaseTempCopyFolder.Replace("/","\"))))
 		{
 			$destinationPath = $releaseDestinationAddedFolderPath + ((Split-Path $diffFile).Replace($WebsiteFolderPath,"")) + "\" + (Split-Path $diffFile -leaf)
+			Write-Verbose -Message "AddedFile - DestinationPath = " + $destinationPath
 			$destinationFolder = $releaseDestinationAddedFolderPath + ((Split-Path $diffFile).Replace($WebsiteFolderPath,""))
+			Write-Verbose -Message "AddedFile - DestinationFolder = " + $destinationFolder
 			New-Item -ItemType Directory -Force -Path $destinationFolder
 			Copy-Item -Path $diffFile -Destination $destinationPath
 		}
@@ -101,7 +107,9 @@ function New-DeltaRelease {
 		ElseIf ($diffFile.StartsWith($releaseTempCopyFolder.Replace("/","\"),"CurrentCultureIgnoreCase") -And !($diffFilesArray -contains $diffFile.Replace($releaseTempCopyFolder.Replace("/","\"),($WebsiteFolderPath + "\"))))
 		{
 			$destinationPath = $releaseDestinationDeletedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),"")) + "\" + (Split-Path $diffFile -leaf)
+			Write-Verbose -Message "DeletedFile - DestinationPath = " + $destinationPath
 			$destinationFolder = $releaseDestinationDeletedFolderPath + ((Split-Path $diffFile).Replace($releaseTempCopyFolder.Replace("/","\"),""))
+			Write-Verbose -Message "DeletedFile - DestinationFolder = " + $destinationFolder
 			New-Item -ItemType Directory -Force -Path $destinationFolder
 			Copy-Item -Path $diffFile -Destination $destinationPath
 		}
