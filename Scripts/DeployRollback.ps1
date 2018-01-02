@@ -55,29 +55,7 @@ $latestCopyFolderName = "LatestWebsiteCopy"
 
 if (!$Rollback)
 {   
-    # 1. Make a temporary copy of the server website folder
-	Copy-Website -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $tempCopyFolderName
-	
-	# 2a. Robocopy source website files to destination server website folder
-    robocopy $WebsiteSourceFolderPath $WebsiteDestFolderPath /E /S /XD .svn
-    if ($lastexitcode -gt 3)
-    {
-        Write-Host "Error - Failed to deploy website files using robocopy!"
-        Exit 1
-    }
-
-	# 2b. If Unicorn is used, robocopy unicorn serialized files to destination server Unicorn serialization folder
-    if ($Unicorn)
-    {
-        robocopy $UnicornSourceFolderPath $UnicornDestFolderPath /E /PURGE /S /XD .svn
-        if ($lastexitcode -gt 3)
-        {
-            Write-Host "Error - Failed to deploy unicorn serialized files using robocopy!"
-            Exit 1
-        }
-    }
-
-	# 3. Create a delta release
+	# 1. Create a delta release
     if (!(Test-Path ($ReleaseBaseFolderPath + "/" + $latestCopyFolderName)))
     {
         New-DeltaRelease -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseTag $ReleaseTag -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $tempCopyFolderName
@@ -86,10 +64,10 @@ if (!$Rollback)
         New-DeltaRelease -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseTag $ReleaseTag -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $latestCopyFolderName
     }
 	
-	# 4. Track new release to listing tracking file
+	# 2. Track new release to listing tracking file
     Add-ReleaseToListFile -ReleaseListLogFile $ReleaseListLogFile -ReleaseTag $ReleaseTag
 	
-	# 5. Make a copy of the latest server website folder
+	# 3. Make a copy of the latest server website folder
     Copy-Website -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $latestCopyFolderName
 }
 else {
