@@ -73,14 +73,14 @@ if (!$Rollback)
 else {
     # ROLLBACK EXECUTION
 	# 1. Create an extra delta release (to catch manual changes in website folder after last automated release)
-    $preRollbackReleaseTag = "Release/" + (Get-Date -format "yyyyMMdd") + "-ManualChanges"
+    $preRollbackReleaseTag = $ReleaseTag + "-ManualChanges"
     New-DeltaRelease -Rollback -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseTag $preRollbackReleaseTag -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $latestCopyFolderName
     # 2. Track extra release in listing tracking file
     Add-ReleaseToListFile -ReleaseListLogFile $ReleaseListLogFile -ReleaseTag $preRollbackReleaseTag
     # 3. Execute the code Rollback
     Undo-Release -WebsiteFolderPath $WebsiteDestFolderPath -RollbackReleaseTag $ReleaseTag -ReleaseBaseFolderPath $ReleaseBaseFolderPath -ReleaseListLogFile $ReleaseListLogFile
     # 4. Create post-rollback delta release
-    $postRollbackReleaseTag = "Release/" + (Get-Date -format "yyyyMMdd") + "-Rollback"
+    $postRollbackReleaseTag = "Release/" + (Get-Date -format "yyyyMMdd") + "-Rollback-" + $ReleaseTag.Replace('Release/','')
     Copy-Website -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $tempCopyFolderName
     New-DeltaRelease -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseTag $postRollbackReleaseTag -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $latestCopyFolderName
     Add-ReleaseToListFile -ReleaseListLogFile $ReleaseListLogFile -ReleaseTag $postRollbackReleaseTag
