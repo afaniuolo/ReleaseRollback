@@ -5,16 +5,10 @@
     This script will deploy a website and create a delta release or it will rollback code to a past release.
 .PARAMETER Rollback
     Switch to execute a release rollback
-.PARAMETER Unicorn
-    Switch to execute robocopy of Unicorn serialized files
 .PARAMETER WebsiteSourceFolderPath
     Path of the source website folder in the file system
 .PARAMETER WebsiteDestFolderPath
     Path of the deployed website folder in the file system
-.PARAMETER UnicornSourceFolderPath
-    Path of the source Unicorn serialization folder in the file system
-.PARAMETER UnicornDestFolderPath
-    Path of the deployed Unicorn serialization folder in the file system
 .PARAMETER ReleaseBaseFolderPath
     Path of the release base folder in the file system
 .PARAMETER ReleaseTag
@@ -35,11 +29,8 @@
 [CmdletBinding(DefaultParametersetName='Deploy')]
 param(
     [Parameter(ParameterSetName='Rollback',Mandatory=$false)] [switch]$Rollback,
-    [Parameter(ParameterSetName='Rollback',Mandatory=$false)] [switch]$Unicorn,
     [Parameter(ParameterSetName='Rollback',Mandatory=$false)] [string]$WebsiteSourceFolderPath,
     [Parameter(Mandatory=$true)] [string]$WebsiteDestFolderPath,
-    [Parameter(ParameterSetName='Rollback',Mandatory=$false)] [string]$UnicornSourceFolderPath,
-    [Parameter(ParameterSetName='Rollback',Mandatory=$false)] [string]$UnicornDestFolderPath,
     [Parameter(Mandatory=$true)] [string]$ReleaseBaseFolderPath,
     [Parameter(Mandatory=$true)] [string]$ReleaseTag,
     [Parameter(Mandatory=$true)] [string]$ReleaseListLogFile
