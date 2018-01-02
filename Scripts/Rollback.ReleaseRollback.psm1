@@ -90,8 +90,8 @@ function Undo-Release {
             Write-Host $rollbackIntermediateMsg
                     
             # Select Delta Release Folder
-            $releaseTagCheck = $intermediateReleaseTag.StartsWith('Release/')
-            $releaseDestinationFolder = $intermediateReleaseTag
+            $releaseTagCheck = $intermediateRollbackTag.StartsWith('Release/')
+            $releaseDestinationFolder = $intermediateRollbackTag
             if ($releaseTagCheck)
             {
                 $releaseDestinationFolder = $releaseDestinationFolder.Replace('Release/','')
@@ -141,7 +141,10 @@ function Undo-Release {
                 $addedFilePath = $addedFile.Path
                 Write-Host ("Rolling back " + $addedFilePath)
                 $pathToDelete = $addedFilePath.Replace($releaseDestinationAddedFolderPath,$WebsiteFolderPath)
-                Remove-Item $pathToDelete
+                if (Test-Path $pathToDelete)
+                {
+                    Remove-Item $pathToDelete
+                }
             }
         }
     }
