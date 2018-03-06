@@ -54,9 +54,10 @@ function Copy-Website {
 	Copy-Item -Path $WebsiteFolderPath -Destination $releaseTempCopyFolder -Recurse
 	
 	# Delete excluded items from website copy
+	$websiteFolderName = Split-Path -Path $WebsiteFolderPath -Leaf
 	ForEach ($path in $PathsToExclude)
     {
-		$absolutePath = $releaseTempCopyFolder + "/" + $path
+		$absolutePath = $releaseTempCopyFolder + "/" + $websiteFolderName + "/" + $path
 		if (Test-Path($absolutePath))
 		{
 			Remove-Item -Path $absolutePath -Recurse
