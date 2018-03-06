@@ -76,9 +76,9 @@ function New-DeltaRelease {
 
 	# Compare temp folder with website folder to detect new and modified files
 
-	$SourceDocs = Get-ChildItem -Path $releaseTempCopyFolder -Recurse | where { $_.FullName.Replace($from, "") -notmatch $excludeMatchRegEx} | foreach  {Get-FileHash -Path $_.FullName}
+	$SourceDocs = Get-ChildItem -Path $releaseTempCopyFolder -Recurse | where { $_.FullName.Replace($releaseTempCopyFolder, "") -notmatch $excludeMatchRegEx} | foreach  {Get-FileHash -Path $_.FullName}
 
-	$DestDocs = Get-ChildItem -Path $WebsiteFolderPath -Recurse | where { $_.FullName.Replace($from, "") -notmatch $excludeMatchRegEx} | foreach  {Get-FileHash -Path $_.FullName}
+	$DestDocs = Get-ChildItem -Path $WebsiteFolderPath -Recurse | where { $_.FullName.Replace($WebsiteFolderPath, "") -notmatch $excludeMatchRegEx} | foreach  {Get-FileHash -Path $_.FullName}
 
 	$diffFilesArray = (Compare-Object -ReferenceObject $SourceDocs -DifferenceObject $DestDocs -Property hash -PassThru).Path
 
