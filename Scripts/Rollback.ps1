@@ -33,7 +33,7 @@ param(
     [Parameter(Mandatory=$true)] [string]$ReleaseBaseFolderPath,
     [Parameter(Mandatory=$true)] [string]$ReleaseTag,
     [Parameter(Mandatory=$true)] [string]$ReleaseListLogFile,
-	[Parameter(Mandatory=$false)] [string]$PathsToExclude
+	[Parameter(Mandatory=$false)] [string[]]$PathsToExclude
 )
 
 Import-Module ./Scripts/Rollback.CopyWebsite.psm1 -Force
