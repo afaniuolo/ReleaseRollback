@@ -25,7 +25,8 @@ function New-DeltaRelease {
 		[string]$WebsiteFolderPath,
 		[string]$ReleaseTag,
 		[string]$ReleaseBaseFolderPath,
-		[string]$CopyFolderName
+		[string]$CopyFolderName,
+		[[string]]$PathsToExclude
 	)
 
 	$ErrorActionPreference = 'Stop'
