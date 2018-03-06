@@ -57,7 +57,7 @@ function Copy-Website {
 	ForEach ($path in $PathsToExclude)
     {
 		$absolutePath = $releaseTempCopyFolder + "/" + $path
-		if ((Test-Path($absolutePath))
+		if (Test-Path($absolutePath))
 		{
 			Remove-Item -Path $absolutePath -Recurse
 		}
