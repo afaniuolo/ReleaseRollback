@@ -71,7 +71,7 @@ function New-DeltaRelease {
 	}
 	
 	# Create RegexEx to exclude paths from comparison
-	[regex] $excludeMatchRegEx = ‘(?i)‘ + (($PathsToExclude |foreach {[regex]::escape($_)}) –join “|”) + ‘’
+	[regex] $excludeMatchRegEx = '(?i)' + (($PathsToExclude |foreach {[regex]::escape($_)}) -join "|") + ''
 
 	# Compare temp folder with website folder to detect new and modified files
 
