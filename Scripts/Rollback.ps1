@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-    Deploy Website and Create Delta Release or Rollback Release
+    Create a Delta Release or Rollback a Release
 .DESCRIPTION
-    This script will deploy a website and create a delta release or it will rollback code to a past release.
+    This script will create a delta release or it will rollback code to a past release.
 .PARAMETER Rollback
     Switch to execute a release rollback
 .PARAMETER WebsiteSourceFolderPath
@@ -16,11 +16,8 @@
 .PARAMETER ReleaseListLogFile
     Path of the release list log file
 .EXAMPLE
-    Deploy and Create Delta Release
+    Create a Delta Release
     .\DeployRollback.ps1 -WebsiteSourceFolderPath "D:\Website" -WebsiteDestFolderPath "D:\Rollback\Website" -ReleaseBaseFolderPath "D:\Rollback\DeltaReleases" -ReleaseTag "Release/20171108-A" -ReleaseListLogFile "D:\Rollback\DeltaReleases\releases.txt"
-.EXAMPLE
-    Deploy with Unicorn files and Create Delta Release
-    .\DeployRollback.ps1 -Unicorn -WebsiteSourceFolderPath "D:\Website" -WebsiteDestFolderPath "D:\Rollback\Website" -UnicornSourceFolderPath "D:\Data\Unicorn" -UnicornDestFolderPath "D:\Rollback\Data\Unicorn" -ReleaseBaseFolderPath "D:\Rollback\DeltaReleases" -ReleaseTag "Release/20171108-A" -ReleaseListLogFile "D:\Rollback\DeltaReleases\releases.txt"
 .EXAMPLE
     Rollback
     .\DeployRollback.ps1 -Rollback -WebsiteDestFolderPath "D:\Rollback\Website" -ReleaseBaseFolderPath "D:\Rollback\DeltaReleases" -ReleaseTag "Release/20171108-A" -ReleaseListLogFile "D:\Rollback\DeltaReleases\releases.txt"
@@ -43,6 +40,10 @@ Import-Module ./Scripts/Rollback.ReleaseRollback.psm1 -Force
 
 $tempCopyFolderName = "TempWebsiteCopy"
 $latestCopyFolderName = "LatestWebsiteCopy"
+
+# Relative paths to exclude from comparison in Website folder
+$pathsToExclude = ["App_Data","temp",]
+
 
 if (!$Rollback)
 {   
@@ -72,10 +73,10 @@ else {
     Undo-Release -WebsiteFolderPath $WebsiteDestFolderPath -RollbackReleaseTag $ReleaseTag -ReleaseBaseFolderPath $ReleaseBaseFolderPath -ReleaseListLogFile $ReleaseListLogFile
     # 4. Create post-rollback delta release
     $postRollbackReleaseTag = "Release/" + (Get-Date -format "yyyyMMdd") + "-Rollback-" + $ReleaseTag.Replace('Release/','')
-    Copy-Website -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $tempCopyFolderName
+    Copy-Website -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $tempCopyFolderName -PathsToExclude $pathsToExclude
     New-DeltaRelease -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseTag $postRollbackReleaseTag -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $latestCopyFolderName
     Add-ReleaseToListFile -ReleaseListLogFile $ReleaseListLogFile -ReleaseTag $postRollbackReleaseTag
-    Copy-Website -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $latestCopyFolderName
+    Copy-Website -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $latestCopyFolderName -PathsToExclude $pathsToExclude
 }
 
 Exit 0

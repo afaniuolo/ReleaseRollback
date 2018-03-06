@@ -13,6 +13,8 @@
 	Path of the release base folder in the file system  
 .PARAMETER CopyFolderName
 	Name of the copy folder in the file system
+.PARAMETER PathsToExclude
+	List of relative paths in Website folder to exclude from being compared
 .PARAMETER VerboseLog
     Switch to execute a release rollback
 #>
@@ -67,12 +69,15 @@ function New-DeltaRelease {
 		md $releaseDestinationAddedFolderPath
 		md $releaseDestinationDeletedFolderPath
 	}
+	
+	# Create RegexEx to exclude paths from comparison
+	[regex] $excludeMatchRegEx = ‘(?i)‘ + (($PathsToExclude |foreach {[regex]::escape($_)}) –join “|”) + ‘’
 
 	# Compare temp folder with website folder to detect new and modified files
 
-	$SourceDocs = Get-ChildItem -Path $releaseTempCopyFolder -Recurse | foreach  {Get-FileHash -Path $_.FullName}
+	$SourceDocs = Get-ChildItem -Path $releaseTempCopyFolder -Recurse | where { $_.FullName.Replace($from, "") -notmatch $excludeMatchRegEx} | foreach  {Get-FileHash -Path $_.FullName}
 
-	$DestDocs = Get-ChildItem -Path $WebsiteFolderPath -Recurse | foreach  {Get-FileHash -Path $_.FullName}
+	$DestDocs = Get-ChildItem -Path $WebsiteFolderPath -Recurse | where { $_.FullName.Replace($from, "") -notmatch $excludeMatchRegEx} | foreach  {Get-FileHash -Path $_.FullName}
 
 	$diffFilesArray = (Compare-Object -ReferenceObject $SourceDocs -DifferenceObject $DestDocs -Property hash -PassThru).Path
 

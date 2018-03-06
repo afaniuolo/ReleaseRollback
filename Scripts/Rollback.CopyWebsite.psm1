@@ -9,12 +9,15 @@
 	Path of the release base folder in the file system  
 .PARAMETER CopyFolderName
 	Name of the copy folder in the file system
+.PARAMETER PathsToExclude
+	List of relative paths in Website folder to exclude from being copied
 #>
 function Copy-Website {
 	param(
 		[string]$WebsiteFolderPath,
 		[string]$ReleaseBaseFolderPath,
-		[string]$CopyFolderName
+		[string]$CopyFolderName,
+		[string[]]$PathsToExclude
 	)
 
 	$ErrorActionPreference = 'Stop'
@@ -49,6 +52,13 @@ function Copy-Website {
 
 	# Copy released website folder in temp folder
 	Copy-Item -Path $WebsiteFolderPath -Destination $releaseTempCopyFolder -Recurse
+	
+	# Delete excluded items from website copy
+	ForEach ($path in $PathsToExclude)
+    {
+		$absolutePath = $releaseTempCopyFolder + "/" + $path
+		Remove-Item -Path $absolutePath -Recurse
+	}
 }
 
 export-modulemember -Function Copy-Website
