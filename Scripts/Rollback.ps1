@@ -36,10 +36,11 @@ param(
 	[Parameter(Mandatory=$false)] [string[]]$PathsToExclude
 )
 
-Import-Module ./Scripts/Rollback.CopyWebsite.psm1 -Force
-Import-Module ./Scripts/Rollback.DeltaReleaseCreation.psm1 -Force
-Import-Module ./Scripts/Rollback.ReleaseTracking.psm1 -Force
-Import-Module ./Scripts/Rollback.ReleaseRollback.psm1 -Force
+$ScriptDir = Split-Path -parent $MyInvocation.MyCommand.Path
+Import-Module $ScriptDir\Rollback.CopyWebsite.psm1 -Force
+Import-Module $ScriptDir\Rollback.DeltaReleaseCreation.psm1 -Force
+Import-Module $ScriptDir\Rollback.ReleaseTracking.psm1 -Force
+Import-Module $ScriptDir\Rollback.ReleaseRollback.psm1 -Force
 
 $tempCopyFolderName = "TempWebsiteCopy"
 $latestCopyFolderName = "LatestWebsiteCopy"
