@@ -57,7 +57,7 @@ function New-DeltaRelease {
 		$releaseDestinationFolder = $releaseDestinationFolder.Replace("Release/","")
 	}
 	$releaseDestinationFolderPath = $ReleaseBaseFolderPath + "/" + $releaseDestinationFolder
-	$releaseTempCopyFolder = $ReleaseBaseFolderPath + "/" + $CopyFolderName + "/" + (Split-Path $WebsiteFolderPath -leaf) + "/"
+	$releaseTempCopyFolder = $ReleaseBaseFolderPath + "/" + $CopyFolderName + "/"
 
 	$releaseDestinationChangedFolderPath = $releaseDestinationFolderPath + "/changed"
 	$releaseDestinationAddedFolderPath = $releaseDestinationFolderPath + "/added"
