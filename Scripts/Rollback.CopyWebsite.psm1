@@ -51,7 +51,7 @@ function Copy-Website {
 	md $releaseTempCopyFolder
 
 	# Create RegexEx to exclude paths from copy
-	[regex] $excludeMatchRegEx = '(?i)' + (($PathsToExclude |foreach {[regex]::escape($_)}) -join "|") + ''
+	[regex] $excludeMatchRegEx = '(?i)^(' + (($PathsToExclude |foreach {[regex]::escape($_)}) -join "|") + ')'
 	
 	# Copy released website folder in temp folder
 	Get-ChildItem -Path $WebsiteFolderPath -Recurse | where {$_.FullName.Replace($WebsiteFolderPath, "") -notmatch $excludeMatchRegEx} | Copy-Item -Destination {

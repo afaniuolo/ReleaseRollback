@@ -56,12 +56,12 @@ function New-DeltaRelease {
 	{
 		$releaseDestinationFolder = $releaseDestinationFolder.Replace("Release/","")
 	}
-	$releaseDestinationFolderPath = $ReleaseBaseFolderPath + "/" + $releaseDestinationFolder
-	$releaseTempCopyFolder = $ReleaseBaseFolderPath + "/" + $CopyFolderName + "/"
+	$releaseDestinationFolderPath = $ReleaseBaseFolderPath + "\" + $releaseDestinationFolder
+	$releaseTempCopyFolder = $ReleaseBaseFolderPath + "\" + $CopyFolderName + "\"
 
-	$releaseDestinationChangedFolderPath = $releaseDestinationFolderPath + "/changed"
-	$releaseDestinationAddedFolderPath = $releaseDestinationFolderPath + "/added"
-	$releaseDestinationDeletedFolderPath = $releaseDestinationFolderPath + "/deleted"
+	$releaseDestinationChangedFolderPath = $releaseDestinationFolderPath + "\changed"
+	$releaseDestinationAddedFolderPath = $releaseDestinationFolderPath + "\added"
+	$releaseDestinationDeletedFolderPath = $releaseDestinationFolderPath + "\deleted"
 
 	if (!(Test-Path $releaseDestinationFolderPath))
 	{
@@ -72,7 +72,7 @@ function New-DeltaRelease {
 	}
 	
 	# Create RegexEx to exclude paths from comparison
-	[regex] $excludeMatchRegEx = '(?i)' + (($PathsToExclude |foreach {[regex]::escape($_)}) -join "|") + ''
+	[regex] $excludeMatchRegEx = '(?i)^(' + (($PathsToExclude |foreach {[regex]::escape($_)}) -join "|") + ')'
 
 	# Compare temp folder with website folder to detect new and modified files
 
