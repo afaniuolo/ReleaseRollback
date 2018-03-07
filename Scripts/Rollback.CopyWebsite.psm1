@@ -54,8 +54,7 @@ function Copy-Website {
 	[regex] $excludeMatchRegEx = '(?i)' + (($PathsToExclude |foreach {[regex]::escape($_)}) -join "|") + ''
 	
 	# Copy released website folder in temp folder
-	Get-ChildItem -Path $WebsiteFolderPath -Recurse | where {$_.FullName.Replace($WebsiteFolderPath, "") -notmatch $excludeMatchRegEx} 
-	| Copy-Item -Destination {
+	Get-ChildItem -Path $WebsiteFolderPath -Recurse | where {$_.FullName.Replace($WebsiteFolderPath, "") -notmatch $excludeMatchRegEx} | Copy-Item -Destination {
 	  if ($_.PSIsContainer) {
 	   Join-Path $to $_.Parent.FullName.Substring($WebsiteFolderPath.length)
 	  } else {
