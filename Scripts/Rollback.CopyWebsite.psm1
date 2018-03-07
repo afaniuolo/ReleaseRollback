@@ -50,19 +50,11 @@ function Copy-Website {
 
 	md $releaseTempCopyFolder
 
-	# Copy released website folder in temp folder
-	Copy-Item -Path $WebsiteFolderPath -Destination $releaseTempCopyFolder -Recurse
+	# Create RegexEx to exclude paths from copy
+	[regex] $excludeMatchRegEx = '(?i)' + (($PathsToExclude |foreach {[regex]::escape($_)}) -join "|") + ''
 	
-	# Delete excluded items from website copy
-	$websiteFolderName = Split-Path -Path $WebsiteFolderPath -Leaf
-	ForEach ($path in $PathsToExclude)
-    {
-		$absolutePath = $releaseTempCopyFolder + "/" + $websiteFolderName + "/" + $path
-		if (Test-Path($absolutePath))
-		{
-			Remove-Item -Path $absolutePath -Recurse
-		}
-	}
+	# Copy released website folder in temp folder
+	Get-ChildItem -Path $WebsiteFolderPath -Recurse -Exclude $exclude | where {$_.FullName.Replace($WebsiteFolderPath, "") -notmatch $excludeMatchRegEx} | Copy-Item -Destination $releaseTempCopyFolder -Recurse
 }
 
 export-modulemember -Function Copy-Website
