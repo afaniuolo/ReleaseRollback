@@ -45,7 +45,7 @@ function Copy-Website {
 
 	if (Test-Path $releaseTempCopyFolder)
 	{
-		Remove-Item -Path $releaseTempCopyFolder -Recurse
+		Remove-Item -Path $releaseTempCopyFolder -Recurse -Force
 	}
 
 	md $releaseTempCopyFolder
@@ -54,7 +54,14 @@ function Copy-Website {
 	[regex] $excludeMatchRegEx = '(?i)' + (($PathsToExclude |foreach {[regex]::escape($_)}) -join "|") + ''
 	
 	# Copy released website folder in temp folder
-	Get-ChildItem -Path $WebsiteFolderPath -Recurse -Exclude $exclude | where {$_.FullName.Replace($WebsiteFolderPath, "") -notmatch $excludeMatchRegEx} | Copy-Item -Destination $releaseTempCopyFolder -Recurse
+	Get-ChildItem -Path $WebsiteFolderPath -Recurse | where {$_.FullName.Replace($WebsiteFolderPath, "") -notmatch $excludeMatchRegEx} 
+	| Copy-Item -Destination {
+	  if ($_.PSIsContainer) {
+	   Join-Path $to $_.Parent.FullName.Substring($WebsiteFolderPath.length)
+	  } else {
+	   Join-Path $to $_.FullName.Substring($WebsiteFolderPath.length)
+	  }
+	} -Force
 }
 
 export-modulemember -Function Copy-Website

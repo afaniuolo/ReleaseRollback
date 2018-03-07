@@ -143,7 +143,7 @@ function New-DeltaRelease {
 	if (!$Rollback -And (Test-Path $releaseTempCopyFolder))
 	{
 		# Delete the Temp folder
-		Remove-Item -Path $releaseTempCopyFolder -Recurse
+		Remove-Item -Path $releaseTempCopyFolder -Recurse -Force
 	}
 }
 export-modulemember -function New-DeltaRelease
