@@ -56,9 +56,9 @@ function Copy-Website {
 	# Copy released website folder in temp folder
 	Get-ChildItem -Path $WebsiteFolderPath -Recurse | where {$_.FullName.Replace($WebsiteFolderPath, "") -notmatch $excludeMatchRegEx} | Copy-Item -Destination {
 	  if ($_.PSIsContainer) {
-	   Join-Path $to $_.Parent.FullName.Substring($WebsiteFolderPath.length)
+	   Join-Path $releaseTempCopyFolder $_.Parent.FullName.Substring($WebsiteFolderPath.length)
 	  } else {
-	   Join-Path $to $_.FullName.Substring($WebsiteFolderPath.length)
+	   Join-Path $releaseTempCopyFolder $_.FullName.Substring($WebsiteFolderPath.length)
 	  }
 	} -Force
 }
