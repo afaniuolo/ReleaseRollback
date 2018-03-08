@@ -62,12 +62,15 @@ function Remove-DeltaReleases {
 			}
 			
 			# Delete the lines of the deleted delta releases from the release file
-			$updatedContent | Add-Content (Get-Content $ReleaseListLogFile)[0]
+			$tempFile = $ReleaseListLogFile + ".temp"
+			Add-Content -Path $tempFile -Value (Get-Content $ReleaseListLogFile)[0]
+
 			For ($i=($totNumLines-$NumOfDeltaReleasesToRetain); $i -lt $totNumLines; $i++) 
 			{
-				$updatedContent | Add-Content (Get-Content $ReleaseListLogFile)[$i]		
+				Add-Content -Path $tempFile -Value (Get-Content $ReleaseListLogFile)[$i]		
 			}
-			$updatedContent | Set-Content -Path $ReleaseListLogFile
+			Set-Content -Path $ReleaseListLogFile -Value (Get-Content $tempFile)
+			Remove-Item -Path $tempFile -Force
 		}
 	}
 }
