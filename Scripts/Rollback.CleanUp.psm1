@@ -46,7 +46,7 @@ function Remove-DeltaReleases {
 			$totNumLines = (Get-Content $ReleaseListLogFile | Measure-Object -Line).Lines
 			$numOfLinesToDelete = $totNumLines - $NumOfDeltaReleasesToRetain
 			
-			For ($i=1; $i -le ($totNumLines - $NumOfDeltaReleasesToRetain); $i++) 
+			For ($i=1; $i -le ($totNumLines - $NumOfDeltaReleasesToRetain - 1); $i++) 
 			{
 				# Read the line release tag
 				$dataRow = (Get-Content $ReleaseListLogFile)[$i]
