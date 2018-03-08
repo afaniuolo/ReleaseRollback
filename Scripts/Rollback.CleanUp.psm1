@@ -39,32 +39,34 @@ function Remove-DeltaReleases {
 	}
 
 	# Read list of available releases from release tracking file
-	if ((Test-Path($ReleaseListLogFile)) -And ((Get-Content $ReleaseListLogFile | Measure-Object -Line).Lines -gt ($NumOfDeltaReleasesToRetain+1)))
+	If (Test-Path($ReleaseListLogFile))
 	{
-		$totNumLines = Get-Content $ReleaseListLogFile | Measure-Object -Line).Lines
-		$numOfLinesToDelete = $totNumLines - $NumOfDeltaReleasesToRetain
-		For ($i=1; $i -le ($totNumLines - $NumOfDeltaReleasesToRetain); $i++) {
-			
-			# Read the line release tag
-			$dataRow = (Get-Content $ReleaseListLogFile)[$i]
-			$releaseTag = ($dataRow.Split(","))[1]
-			
-			# Delete the associated delta release folder
-			$releaseDestinationFolder = $releaseTag.Replace("Release/","")
-			$releaseDestinationFolderPath = $ReleaseBaseFolderPath + "\" + $releaseDestinationFolder
-			if (Test-Path $releaseDestinationFolderPath)
-			{
-				Remove-Item -Path $releaseDestinationFolderPath -Recurse -Force
-			}			
-		}
-		
-		# Delete the lines of the deleted delta releases from the release file
-		$updatedContent | Add-Content (Get-Content $ReleaseListLogFile)[0]
-		For ($i=$totNumLines-$NumOfDeltaReleasesToRetain; $i -lt $totNumLines; $i++) {
-			$updatedContent | Add-Content (Get-Content $ReleaseListLogFile)[$i]		
-		}
-		$updatedContent | Set-Content -Path $ReleaseListLogFile
+		If ((Get-Content $ReleaseListLogFile | Measure-Object -Line).Lines -gt ($NumOfDeltaReleasesToRetain+1))
+		{
+			$totNumLines = Get-Content $ReleaseListLogFile | Measure-Object -Line).Lines
+			$numOfLinesToDelete = $totNumLines - $NumOfDeltaReleasesToRetain
+			For ($i=1; $i -le ($totNumLines - $NumOfDeltaReleasesToRetain); $i++) {
 				
+				# Read the line release tag
+				$dataRow = (Get-Content $ReleaseListLogFile)[$i]
+				$releaseTag = ($dataRow.Split(","))[1]
+				
+				# Delete the associated delta release folder
+				$releaseDestinationFolder = $releaseTag.Replace("Release/","")
+				$releaseDestinationFolderPath = $ReleaseBaseFolderPath + "\" + $releaseDestinationFolder
+				if (Test-Path $releaseDestinationFolderPath)
+				{
+					Remove-Item -Path $releaseDestinationFolderPath -Recurse -Force
+				}			
+			}
+			
+			# Delete the lines of the deleted delta releases from the release file
+			$updatedContent | Add-Content (Get-Content $ReleaseListLogFile)[0]
+			For ($i=$totNumLines-$NumOfDeltaReleasesToRetain; $i -lt $totNumLines; $i++) {
+				$updatedContent | Add-Content (Get-Content $ReleaseListLogFile)[$i]		
+			}
+			$updatedContent | Set-Content -Path $ReleaseListLogFile
+		}			
 	}	
 }
 export-modulemember -function Remove-DeltaReleases
