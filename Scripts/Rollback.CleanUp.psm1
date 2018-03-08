@@ -39,7 +39,7 @@ function Remove-DeltaReleases {
 	}
 
 	# Read list of available releases from release tracking file
-	If (Test-Path($ReleaseListLogFile))
+	If (Test-Path $ReleaseListLogFile)
 	{
 		If ((Get-Content $ReleaseListLogFile | Measure-Object -Line).Lines -gt ($NumOfDeltaReleasesToRetain+1))
 		{
