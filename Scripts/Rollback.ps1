@@ -41,6 +41,7 @@ Import-Module $ScriptDir\Rollback.CopyWebsite.psm1 -Force
 Import-Module $ScriptDir\Rollback.DeltaReleaseCreation.psm1 -Force
 Import-Module $ScriptDir\Rollback.ReleaseTracking.psm1 -Force
 Import-Module $ScriptDir\Rollback.ReleaseRollback.psm1 -Force
+Import-Module $ScriptDir\Rollback.CleanUp.psm1 -Force
 
 $tempCopyFolderName = "TempWebsiteCopy"
 $latestCopyFolderName = "LatestWebsiteCopy"
@@ -61,6 +62,9 @@ if (!$Rollback)
 	
 	# 3. Make a copy of the latest server website folder
     Copy-Website -WebsiteFolderPath $WebsiteDestFolderPath -ReleaseBaseFolderPath $ReleaseBaseFolderPath -CopyFolderName $latestCopyFolderName -PathsToExclude $PathsToExclude
+	
+	# 4. Clean Up old Delta Releases
+	Remove-DeltaReleases -ReleaseBaseFolderPath $ReleaseBaseFolderPath -NumOfDeltaReleasesToRetain 10 -ReleaseListLogFile $ReleaseListLogFile
 }
 else {
     # ROLLBACK EXECUTION
