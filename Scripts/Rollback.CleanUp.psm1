@@ -14,7 +14,8 @@
 function Remove-DeltaReleases {
 	param(
 		[string]$ReleaseBaseFolderPath,
-		[int]$NumOfDeltaReleasesToRetain
+		[int]$NumOfDeltaReleasesToRetain,
+		[string]$ReleaseListLogFile
 	)
 
 	$ErrorActionPreference = 'Stop'
@@ -38,10 +39,10 @@ function Remove-DeltaReleases {
 	}
 
 	# Read list of available releases from release tracking file
-	if (Test-Path($ReleaseListLogFile) -And (Get-Content $ReleaseListLogFile | Measure-Object –Line).Lines -gt ($NumOfDeltaReleasesToRetain+1))
+	if ((Test-Path($ReleaseListLogFile)) -And ((Get-Content $ReleaseListLogFile | Measure-Object -Line).Lines -gt ($NumOfDeltaReleasesToRetain+1)))
 	{
-		$totNumLines = Get-Content $ReleaseListLogFile | Measure-Object –Line).Lines;
-		$numOfLinesToDelete = $totNumLines - $NumOfDeltaReleasesToRetain;
+		$totNumLines = Get-Content $ReleaseListLogFile | Measure-Object -Line).Lines
+		$numOfLinesToDelete = $totNumLines - $NumOfDeltaReleasesToRetain
 		For ($i=1; $i -le ($totNumLines - $NumOfDeltaReleasesToRetain); $i++) {
 			
 			# Read the line release tag
