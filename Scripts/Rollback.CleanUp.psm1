@@ -41,9 +41,9 @@ function Remove-DeltaReleases {
 	# Read list of available releases from release tracking file
 	if(Test-Path $ReleaseListLogFile)
 	{
-		if((Get-Content $ReleaseListLogFile | Measure-Object -Line).Lines -gt ($NumOfDeltaReleasesToRetain+1))
+		if((Get-Content $ReleaseListLogFile | Measure-Object -Line).Lines -gt $NumOfDeltaReleasesToRetain+1)
 		{
-			$totNumLines = Get-Content $ReleaseListLogFile | Measure-Object -Line).Lines
+			$totNumLines = (Get-Content $ReleaseListLogFile | Measure-Object -Line).Lines
 			$numOfLinesToDelete = $totNumLines - $NumOfDeltaReleasesToRetain
 			
 			For ($i=1; $i -le ($totNumLines - $NumOfDeltaReleasesToRetain); $i++) 
