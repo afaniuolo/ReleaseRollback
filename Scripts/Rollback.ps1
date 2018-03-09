@@ -5,8 +5,6 @@
     This script will create a delta release or it will rollback code to a past release.
 .PARAMETER Rollback
     Switch to execute a release rollback
-.PARAMETER WebsiteSourceFolderPath
-    Path of the source website folder in the file system
 .PARAMETER WebsiteDestFolderPath
     Path of the deployed website folder in the file system
 .PARAMETER ReleaseBaseFolderPath
@@ -28,7 +26,6 @@
 [CmdletBinding(DefaultParametersetName='Deploy')]
 param(
     [Parameter(ParameterSetName='Rollback',Mandatory=$false)] [switch]$Rollback,
-    [Parameter(ParameterSetName='Rollback',Mandatory=$false)] [string]$WebsiteSourceFolderPath,
     [Parameter(Mandatory=$true)] [string]$WebsiteDestFolderPath,
     [Parameter(Mandatory=$true)] [string]$ReleaseBaseFolderPath,
     [Parameter(Mandatory=$true)] [string]$ReleaseTag,
